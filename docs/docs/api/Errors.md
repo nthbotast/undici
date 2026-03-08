@@ -27,7 +27,24 @@ import { errors } from 'undici'
 | `ResponseExceededMaxSizeError`       | `UND_ERR_RES_EXCEEDED_MAX_SIZE`       | response body exceed the max size allowed                                 |
 | `SecureProxyConnectionError`         | `UND_ERR_PRX_TLS`                     | tls connection to a proxy failed                                          |
 
+## Timeout errors quick reference
+
+- `UND_ERR_CONNECT_TIMEOUT`: The client could not establish the TCP/TLS
+  connection within the configured connect timeout
+  (`connect.timeout` or top-level `connectTimeout`).
+- `UND_ERR_HEADERS_TIMEOUT`: A response did not produce complete headers in
+  time (`headersTimeout`).
+- `UND_ERR_BODY_TIMEOUT`: Response body streaming stalled for longer than the
+  configured timeout between chunks (`bodyTimeout`).
+- `UND_ERR_SOCKET`: Generic socket-level failure. This also covers
+  timeout-related socket failures that are not represented by a dedicated
+  Undici timeout code.
+
+> There is no dedicated `UND_ERR_SOCKET_TIMEOUT` error code in current Undici
+> versions.
+
 Be aware of the possible difference between the global dispatcher version and the actual undici version you might be using. We recommend to avoid the check `instanceof errors.UndiciError` and seek for the `error.code === '<error_code>'` instead to avoid inconsistencies.
+
 ### `SocketError`
 
 The `SocketError` has a `.socket` property which holds socket metadata:
